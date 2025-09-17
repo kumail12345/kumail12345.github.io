@@ -19,7 +19,7 @@
 
 <input type="text" id="user" placeholder="Your name"/>
 <input type="text" id="message" placeholder="Message"/>
-<button onclick="sendMessage()">Send</button>
+<button id="sendBtn">Send</button>
 
 <script type="module">
   // Firebase imports
@@ -46,6 +46,7 @@
   const chatBox = document.getElementById("chat");
   const userInput = document.getElementById("user");
   const msgInput = document.getElementById("message");
+  const sendBtn = document.getElementById("sendBtn");
 
   // Listen to messages in real-time
   const q = query(collection(db, "messages"), orderBy("timestamp"));
@@ -61,8 +62,8 @@
     chatBox.scrollTop = chatBox.scrollHeight;
   });
 
-  // Send a new message
-  async function sendMessage() {
+  // Send message using event listener
+  sendBtn.addEventListener("click", async () => {
     const user = userInput.value.trim();
     const text = msgInput.value.trim();
     if (!user || !text) return;
@@ -74,7 +75,7 @@
     });
 
     msgInput.value = "";
-  }
+  });
 </script>
 
 </body>
