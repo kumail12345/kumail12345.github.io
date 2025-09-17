@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Chat Aftermath</title>
+<style>
+  body { font-family: sans-serif; background: #f0f0f0; padding: 20px; }
+  #chat { background: white; border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: auto; margin-bottom: 10px; }
+  input, button { padding: 8px; margin: 2px; }
+  .msg { margin-bottom: 5px; }
+  .user { font-weight: bold; }
+</style>
+</head>
+<body>
+
+<h1>💬 Chat Aftermath</h1>
+<div id="chat"></div>
+
+<input type="text" id="user" placeholder="Your name"/>
+<input type="text" id="message" placeholder="Message"/>
+<button onclick="sendMessage()">Send</button>
+
+<script type="module">
+  // Firebase imports
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-analytics.js";
+
+  // Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyBo2p5H5gFdLMr7tk-a7aQePrBvim8enoI",
+    authDomain: "chataftermath.firebaseapp.com",
+    projectId: "chataftermath",
+    storageBucket: "chataftermath.firebasestorage.app",
+    messagingSenderId: "983397184888",
+    appId: "1:983397184888:web:d841a7c6c1b30b32b8448d",
+    measurementId: "G-JP52N51F2Q"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const db = getFirestore(app);
+
+  const chatBox = document.getElementById("chat");
+  const userInput = document.getElementById("user");
+  const msgInput = document.getElementById("message");
+
+  // Listen to messages in real-time
+  const q = query(collection(db, "messages"), orderBy("timestamp"));
+  onSnapshot(q, (snapshot) => {
+    chatBox.innerHTML = "";
+    snapshot.forEach(doc => {
+      const msg = doc.data();
+      const div = document.createElement("div");
+      div.className = "msg";
+      div.innerHTML = `<span class="user">${msg.user}:</span> ${msg.text}`;
+      chatBox.appendChild(div);
+    });
+    chatBox.scrollTop = chatBox.scrollHeight;
+  });
+
+  // Send a new message
+  async function sendMessage() {
+    const user = userInput.value.trim();
+    const text = msgInput.value.trim();
+    if (!user || !text) return;
+
+    await addDoc(collection(db, "messages"), {
+      user,
+      text,
+      timestamp: serverTimestamp()
+    });
+
+    msgInput.value = "";
+  }
+</script>
+
+</body>
+</html>
