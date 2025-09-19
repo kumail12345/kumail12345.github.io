@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chat Aftermath</title>
+<title>Chat kp</title>
 <style>
   /* Body & container */
   body {
@@ -36,8 +36,20 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    overflow-y: hidden; /* prevent scrolling */
+    overflow-y: auto; /* ✅ allow scrolling */
     background: #111;
+  }
+
+  /* Optional: prettier scrollbar */
+  #chat::-webkit-scrollbar {
+    width: 6px;
+  }
+  #chat::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 10px;
+  }
+  #chat::-webkit-scrollbar-thumb:hover {
+    background: #666;
   }
 
   .msg {
