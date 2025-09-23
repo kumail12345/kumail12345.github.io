@@ -252,13 +252,19 @@
     const u = loginUser.value.trim();
     const p = loginPass.value;
     loginError.textContent = '';
-    // Simple client-side check
-    if (u === VALID_USERNAME && p === VALID_PASSWORD) {
-      setLoggedIn(u);
-      loginUser.value = '';
-      loginPass.value = '';
-    } else {
-      loginError.textContent = 'Incorrect username or password.';
+    try {
+      // Look up expected password for this username from the credentials object
+      const expected = VALID_CREDENTIALS[u];
+      if (expected && p === expected) {
+        setLoggedIn(u);
+        loginUser.value = '';
+        loginPass.value = '';
+      } else {
+        loginError.textContent = 'Incorrect username or password.';
+      }
+    } catch (err) {
+      console.error('Login error', err);
+      loginError.textContent = 'Login failed — check developer console.';
     }
   });
 
