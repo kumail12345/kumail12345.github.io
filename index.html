@@ -213,8 +213,11 @@
   const logoutBtn = document.getElementById('logoutBtn');
 
   // Hard-coded demo credentials (client-side). DO NOT use this for production!
-  const VALID_USERNAME = 'nevan';
-  const VALID_PASSWORD = '192.168.1.152';
+  // Support multiple demo users stored in an object for easy extension
+  const VALID_CREDENTIALS = {
+    'nevan': '192.168.1.152',
+    'keith': 'Nwordpassgranted2025'
+  };
 
   // Check if a user is already stored in session
   let loggedUser = sessionStorage.getItem('chat_user');
